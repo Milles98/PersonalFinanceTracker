@@ -10,7 +10,7 @@
         <ListView ItemsSource="{Binding Transactions}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding  Description}" Width="200"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"/>
                     <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" Width="100"/>
                     <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}" Width="100"/>
                     <GridViewColumn Header="Date" Width="200">
@@ -24,8 +24,8 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                <Button Content="Delete" Command="{Binding DataContext.DeleteTransactionCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}"/>
-                                <Button Content="Update" Command="{Binding DataContext.UpdateTransactionCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}"/>
+                                    <Button Content="Delete" Command="{Binding DataContext.DeleteTransactionCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}"/>
+                                    <Button Content="Update" Command="{Binding DataContext.UpdateTransactionCommand, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -33,5 +33,12 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
+        <!-- Success Message -->
+        <Border Background="Beige" CornerRadius="10" Padding="10" Visibility="{Binding IsSuccessMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock x:Name="SuccessMessage" Text="{Binding SuccessMessage}" Foreground="Green" FontWeight="Bold"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+        </Border>
     </Grid>
 </UserControl>
