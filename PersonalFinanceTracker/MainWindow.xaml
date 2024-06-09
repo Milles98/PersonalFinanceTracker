@@ -12,17 +12,18 @@
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Content="Login" Command="{Binding ShowLoginViewCommand}" Margin="5"></Button>
-            <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5"></Button>
-            <Button Content="Transaction History" Command="{Binding ShowTransactionHistoryViewCommand}" Margin="5"></Button>
+            <Button Content="Login" Command="{Binding ShowLoginViewCommand}" Margin="5"/>
+            <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5"/>
+            <Button Content="Transaction History" Command="{Binding ShowTransactionHistoryViewCommand}" Margin="5"/>
+            <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5"/>
         </StackPanel>
         
-        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"></ContentControl>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
     </Grid>
 </Window>
 
