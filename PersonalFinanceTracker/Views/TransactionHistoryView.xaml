@@ -4,9 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PersonalFinanceTracker.Views"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             mc:Ignorable="d">
     <Grid>
-        
+        <ListView ItemsSource="{Binding Transactions}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"></GridViewColumn>
+                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" Width="100"></GridViewColumn>
+                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}" Width="100"></GridViewColumn>
+                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="200"></GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>
