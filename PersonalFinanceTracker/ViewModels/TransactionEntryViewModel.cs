@@ -11,6 +11,7 @@ namespace PersonalFinanceTracker.ViewModels;
 public class TransactionEntryViewModel : INotifyPropertyChanged
 {
     private Transaction _newTransaction;
+    private readonly int _currentUserId;
 
     public Transaction NewTransaction
     {
@@ -25,8 +26,9 @@ public class TransactionEntryViewModel : INotifyPropertyChanged
     public ObservableCollection<string> Categories { get; set; }
     public ICommand AddTransactionCommand { get; }
 
-    public TransactionEntryViewModel()
+    public TransactionEntryViewModel(int currentUserId)
     {
+        _currentUserId = currentUserId;
         NewTransaction = new Transaction();
         Categories = new ObservableCollection<string> { "Food", "Housing", "Utilities", "Transportation", "Health", "Insurance", "Entertainment", "Other" };
         AddTransactionCommand = new RelayCommand(AddTransaction);
@@ -36,6 +38,7 @@ public class TransactionEntryViewModel : INotifyPropertyChanged
     {
         using (var context = new FinanceContext())
         {
+            NewTransaction.UserId = _currentUserId;
             context.Transactions.Add(NewTransaction);
             context.SaveChanges();
             NewTransaction = new Transaction();
