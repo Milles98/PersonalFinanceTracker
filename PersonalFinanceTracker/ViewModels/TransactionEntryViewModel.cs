@@ -12,6 +12,7 @@ namespace PersonalFinanceTracker.ViewModels
     public class TransactionEntryViewModel : INotifyPropertyChanged
     {
         private Transaction _newTransaction;
+        private string _newCategory;
         private readonly int _currentUserId;
 
         public Transaction NewTransaction
@@ -23,9 +24,20 @@ namespace PersonalFinanceTracker.ViewModels
                 OnPropertyChanged(nameof(NewTransaction));
             }
         }
+        public string NewCategory
+        {
+            get => _newCategory;
+            set
+            {
+                _newCategory = value;
+                OnPropertyChanged(nameof(NewCategory));
+            }
+        }
 
         public ObservableCollection<string> Categories { get; set; }
         public ICommand AddTransactionCommand { get; }
+        public ICommand AddCategoryCommand { get; }
+        
 
         public TransactionEntryViewModel(int currentUserId)
         {
@@ -33,6 +45,7 @@ namespace PersonalFinanceTracker.ViewModels
             NewTransaction = new Transaction { Date = DateTime.Now };
             Categories = new ObservableCollection<string> { "Food", "Housing", "Utilities", "Transportation", "Health", "Insurance", "Entertainment", "Other" };
             AddTransactionCommand = new RelayCommand(AddTransaction);
+            AddCategoryCommand = new RelayCommand(AddCategory);
         }
 
         private void AddTransaction(object obj)
@@ -44,6 +57,16 @@ namespace PersonalFinanceTracker.ViewModels
                 context.SaveChanges();
                 NewTransaction = new Transaction { Date = DateTime.Now }; 
                 OnPropertyChanged(nameof(NewTransaction));
+            }
+        }
+
+        private void AddCategory(object obj)
+        {
+            if (!string.IsNullOrWhiteSpace(NewCategory) && !Categories.Contains(NewCategory))
+            {
+                Categories.Add(NewCategory);
+                NewCategory = string.Empty;
+                OnPropertyChanged(nameof(NewCategory));
             }
         }
 
