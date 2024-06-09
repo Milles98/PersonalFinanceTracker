@@ -17,4 +17,9 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Images\financetracker-background.png" />
+      <Resource Include="Images\financetracker-background.png" />
+    </ItemGroup>
+
 </Project>

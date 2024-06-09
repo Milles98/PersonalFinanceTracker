@@ -9,7 +9,7 @@
              d:DataContext="{d:DesignInstance viewModels:WelcomeViewModel, IsDesignTimeCreatable=True}">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="{Binding WelcomeMessage}" FontSize="24"></TextBlock>
+            <TextBlock Text="{Binding WelcomeMessage}" Margin="0 0 0 200" FontSize="24"></TextBlock>
         </StackPanel>
     </Grid>
 </UserControl>
