@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using PersonalFinanceTracker.Models;
+using PersonalFinanceTracker.ViewModels;
 
 namespace PersonalFinanceTracker.Data
 {
@@ -11,36 +14,39 @@ namespace PersonalFinanceTracker.Data
 
             if (!context.Users.Any())
             {
-                context.Users.Add(new User
+                var user = new User
                 {
                     Username = "Mille",
                     Password = "123"
-                });
-            }
+                };
 
-            if (!context.Transactions.Any())
-            {
-                context.Transactions.AddRange(
-                    new Transaction
-                    {
-                        Description = "Groceries",
-                        Amount = 50,
-                        Category = "Food",
-                        Date = DateTime.Now,
-                        UserId = 1 
-                    },
-                    new Transaction
-                    {
-                        Description = "Rent",
-                        Amount = 1200,
-                        Category = "Housing",
-                        Date = DateTime.Now,
-                        UserId = 1 
-                    }
-                );
-            }
+                context.Users.Add(user);
+                context.SaveChanges();
 
-            context.SaveChanges();
+                if (!context.Transactions.Any())
+                {
+                    context.Transactions.AddRange(
+                        new Transaction
+                        {
+                            Description = "Groceries",
+                            Amount = 50,
+                            Category = "Food",
+                            Date = DateTime.Now,
+                            UserId = user.Id // Use the generated UserId
+                        },
+                        new Transaction
+                        {
+                            Description = "Rent",
+                            Amount = 1200,
+                            Category = "Housing",
+                            Date = DateTime.Now,
+                            UserId = user.Id // Use the generated UserId
+                        }
+                    );
+                }
+                
+                context.SaveChanges();
+            }
         }
     }
 }
