@@ -1,89 +1,123 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using PersonalFinanceTracker.Command;
 using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
-using PersonalFinanceTracker.Views;
 
-namespace PersonalFinanceTracker.ViewModels;
-
-public class TransactionHistoryViewModel : INotifyPropertyChanged
+namespace PersonalFinanceTracker.ViewModels
 {
-    public ObservableCollection<Transaction> Transactions { get; set; }
-    public ICommand DeleteTransactionCommand { get; }
-    public ICommand UpdateTransactionCommand { get; }
-    private readonly int _currentUserId;
-
-    public TransactionHistoryViewModel(int currentUserId)
+    public class TransactionHistoryViewModel : INotifyPropertyChanged
     {
-        _currentUserId = currentUserId;
-        Transactions = new ObservableCollection<Transaction>();
-        DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
-        UpdateTransactionCommand = new RelayCommand(UpdateTransaction);
-        LoadTransactions();
-    }
+        public ObservableCollection<Transaction> Transactions { get; set; }
+        public ICommand DeleteTransactionCommand { get; }
+        public ICommand UpdateTransactionCommand { get; }
 
-    private void LoadTransactions()
-    {
-        using (var context = new FinanceContext())
+        private readonly int _currentUserId;
+        private string _successMessage;
+        private bool _isSuccessMessageVisible;
+
+        public string SuccessMessage
         {
-            var transactions = context.Transactions
-                .Where(u => u.UserId == _currentUserId)
-                .ToList();
-            Transactions.Clear();
-            foreach (var transaction in transactions)
+            get => _successMessage;
+            set
             {
-                Transactions.Add(transaction);
+                _successMessage = value;
+                OnPropertyChanged(nameof(SuccessMessage));
             }
         }
-    }
-    
-    private void DeleteTransaction(object obj)
-    {
-        if (obj is Transaction transaction)
+
+        public bool IsSuccessMessageVisible
+        {
+            get => _isSuccessMessageVisible;
+            set
+            {
+                _isSuccessMessageVisible = value;
+                OnPropertyChanged(nameof(IsSuccessMessageVisible));
+            }
+        }
+
+        public TransactionHistoryViewModel(int currentUserId)
+        {
+            _currentUserId = currentUserId;
+            Transactions = new ObservableCollection<Transaction>();
+            DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
+            UpdateTransactionCommand = new RelayCommand(UpdateTransaction);
+            LoadTransactions();
+        }
+
+        private void LoadTransactions()
         {
             using (var context = new FinanceContext())
             {
-                context.Transactions.Remove(transaction);
-                context.SaveChanges();
-                Transactions.Remove(transaction);
-            }
-        }
-    }
-
-    private void UpdateTransaction(object obj)
-    {
-        if (obj is Transaction transaction)
-        {
-            using (var context = new FinanceContext())
-            {
-                var existingTransactions = context.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
-                if (existingTransactions != null)
+                var transactions = context.Transactions
+                    .Where(u => u.UserId == _currentUserId)
+                    .ToList();
+                Transactions.Clear();
+                foreach (var transaction in transactions)
                 {
-                    existingTransactions.Description = transaction.Description;
-                    existingTransactions.Amount = transaction.Amount;
-                    existingTransactions.Category = transaction.Category;
-                    existingTransactions.Date = transaction.Date;
-                    context.SaveChanges();
+                    Transactions.Add(transaction);
                 }
             }
         }
-    }
-    
-    public event PropertyChangedEventHandler? PropertyChanged;
+        
+        private void DeleteTransaction(object obj)
+        {
+            if (obj is Transaction transaction)
+            {
+                using (var context = new FinanceContext())
+                {
+                    context.Transactions.Remove(transaction);
+                    context.SaveChanges();
+                    Transactions.Remove(transaction);
+                    ShowSuccessMessage("Transaction deleted successfully!");
+                }
+            }
+        }
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+        private void UpdateTransaction(object obj)
+        {
+            if (obj is Transaction transaction)
+            {
+                using (var context = new FinanceContext())
+                {
+                    var existingTransactions = context.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
+                    if (existingTransactions != null)
+                    {
+                        existingTransactions.Description = transaction.Description;
+                        existingTransactions.Amount = transaction.Amount;
+                        existingTransactions.Category = transaction.Category;
+                        existingTransactions.Date = transaction.Date;
+                        context.SaveChanges();
+                        ShowSuccessMessage("Transaction updated successfully!");
+                    }
+                }
+            }
+        }
 
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
+        private async void ShowSuccessMessage(string message)
+        {
+            SuccessMessage = message;
+            IsSuccessMessageVisible = true;
+            await Task.Delay(2000);
+            IsSuccessMessageVisible = false;
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
     }
 }
