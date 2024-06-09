@@ -7,6 +7,9 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock Text="{Binding WelcomeMessage}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"></TextBlock>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="{Binding WelcomeMessage}" FontSize="24"></TextBlock>
+            <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="10"></Button>
+        </StackPanel>
     </Grid>
 </UserControl>
