@@ -57,8 +57,8 @@ namespace PersonalFinanceTracker.ViewModels
 
         private void ShowLoginView() => CurrentView = new LoginView { DataContext = new LoginViewModel(ShowRegisterView, ShowWelcomeView) };
         private void ShowRegisterView() => CurrentView = new RegisterView { DataContext = new RegisterViewModel(ShowLoginView) };
-        private void ShowTransactionEntryView() => CurrentView = new TransactionEntryView();
-        private void ShowTransactionHistoryView() => CurrentView = new TransactionHistoryView();
+        private void ShowTransactionEntryView() => CurrentView = new TransactionEntryView { DataContext = new TransactionEntryViewModel() };
+        private void ShowTransactionHistoryView() => CurrentView = new TransactionHistoryView { DataContext = new TransactionHistoryViewModel() };
         private void ShowWelcomeView(string username) => CurrentView = new WelcomeView { DataContext = new WelcomeViewModel(username) };
 
         public event PropertyChangedEventHandler PropertyChanged;
