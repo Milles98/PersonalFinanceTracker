@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:PersonalFinanceTracker.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Background="LightGray">
     <Window.DataContext>
         <viewModels:MainViewModel/>
     </Window.DataContext>
@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
             <Button Content="Login" Command="{Binding ShowLoginViewCommand}" Margin="5"/>
             <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5"/>
             <Button Content="Transaction History" Command="{Binding ShowTransactionHistoryViewCommand}" Margin="5"/>
