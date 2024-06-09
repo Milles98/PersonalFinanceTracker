@@ -10,4 +10,3 @@ namespace PersonalFinanceTracker;
 public partial class App : Application
 {
 }
-
