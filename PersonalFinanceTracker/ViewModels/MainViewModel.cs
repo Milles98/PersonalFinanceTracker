@@ -31,6 +31,17 @@ namespace PersonalFinanceTracker.ViewModels
             }
         }
 
+        private bool _isLoggedIn;
+        public bool IsLoggedIn
+        {
+            get => _isLoggedIn;
+            set
+            {
+                _isLoggedIn = value;
+                OnPropertyChanged(nameof(IsLoggedIn));
+            }
+        }
+
         public ICommand ShowLoginViewCommand { get; }
         public ICommand ShowRegisterViewCommand { get; }
         public ICommand LogoutCommand { get; }
@@ -49,17 +60,50 @@ namespace PersonalFinanceTracker.ViewModels
             ShowRegisterViewCommand = new RelayCommand(_ => ShowRegisterView());
             ShowTransactionEntryViewCommand = new RelayCommand(_ => ShowTransactionEntryView());
             ShowTransactionHistoryViewCommand = new RelayCommand(_ => ShowTransactionHistoryView());
-            LogoutCommand = new RelayCommand(_ => ShowLoginView());
+            LogoutCommand = new RelayCommand(_ => Logout());
 
             // Set initial view
             ShowLoginView();
         }
 
-        private void ShowLoginView() => CurrentView = new LoginView { DataContext = new LoginViewModel(ShowRegisterView, ShowWelcomeView) };
-        private void ShowRegisterView() => CurrentView = new RegisterView { DataContext = new RegisterViewModel(ShowLoginView) };
-        private void ShowTransactionEntryView() => CurrentView = new TransactionEntryView { DataContext = new TransactionEntryViewModel() };
-        private void ShowTransactionHistoryView() => CurrentView = new TransactionHistoryView { DataContext = new TransactionHistoryViewModel() };
-        private void ShowWelcomeView(string username) => CurrentView = new WelcomeView { DataContext = new WelcomeViewModel(username) };
+        private void ShowLoginView()
+        {
+            IsLoggedIn = false;
+            CurrentView = new LoginView { DataContext = new LoginViewModel(ShowRegisterView, ShowWelcomeView) };
+        }
+
+        private void ShowRegisterView()
+        {
+            CurrentView = new RegisterView { DataContext = new RegisterViewModel(ShowLoginView) };
+        }
+
+        private void ShowTransactionEntryView()
+        {
+            if (IsLoggedIn)
+            {
+                CurrentView = new TransactionEntryView { DataContext = new TransactionEntryViewModel() };
+            }
+        }
+
+        private void ShowTransactionHistoryView()
+        {
+            if (IsLoggedIn)
+            {
+                CurrentView = new TransactionHistoryView { DataContext = new TransactionHistoryViewModel() };
+            }
+        }
+
+        private void ShowWelcomeView(string username)
+        {
+            IsLoggedIn = true;
+            CurrentView = new WelcomeView { DataContext = new WelcomeViewModel(username) };
+        }
+
+        private void Logout()
+        {
+            IsLoggedIn = false;
+            ShowLoginView();
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

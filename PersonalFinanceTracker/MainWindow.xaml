@@ -5,24 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:PersonalFinanceTracker.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Background="LightGray">
+        Title="Finance Tracker" Height="450" Width="800" Background="LightGray">
     <Window.DataContext>
-        <viewModels:MainViewModel/>
+        <viewModels:MainViewModel />
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
-            <Button Content="Login" Command="{Binding ShowLoginViewCommand}" Margin="5"/>
-            <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5"/>
-            <Button Content="Transaction History" Command="{Binding ShowTransactionHistoryViewCommand}" Margin="5"/>
-            <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5"/>
+            <Button>
+                <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5" />
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button>
+            <Button Content="Transaction History" Command="{Binding ShowTransactionHistoryViewCommand}" Margin="5" />
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button>
+            <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5" />
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
-        
-        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
+
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
     </Grid>
 </Window>
 
