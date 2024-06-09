@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using System.Windows.Input;
 using PersonalFinanceTracker.Command;
+using PersonalFinanceTracker.Data;
 
 namespace PersonalFinanceTracker.ViewModels;
 
@@ -48,11 +50,17 @@ public class LoginViewModel : INotifyPropertyChanged
 
     private void Login(object obj)
     {
-        // Implement login logic here
-        // For simplicity, assume any non-empty username and password is valid
-        if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
+        using (var context = new FinanceContext())
         {
-            _showTransactionEntryViewAction();
+            var user = context.Users.FirstOrDefault(u => u.Username == Username && u.Password == Password);
+            if (user != null)
+            {
+                _showTransactionEntryViewAction();
+            }
+            else
+            {
+                MessageBox.Show("Ogiltigt användarnamn eller lösenord");
+            }
         }
     }
 

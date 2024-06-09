@@ -12,4 +12,12 @@ public class FinanceContext : DbContext
     {
         optionsBuilder.UseSqlServer("Server=localhost;Database=FinanceTrackerData;Trusted_Connection=True;TrustServerCertificate=true;MultipleActiveResultSets=true");
     }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Transaction>()
+            .HasOne<User>()
+            .WithMany()
+            .HasForeignKey(t => t.UserId);
+    }
 }
