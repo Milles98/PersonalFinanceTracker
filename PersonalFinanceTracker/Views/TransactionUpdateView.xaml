@@ -17,7 +17,7 @@
             <ComboBox x:Name="CategoryComboBox" Margin="10 10" ItemsSource="{Binding Categories}" SelectedValue="{Binding Transaction.CategoryId}" DisplayMemberPath="Name" SelectedValuePath="Id"/>
             <TextBlock Text="Date" Margin="0 10 0 -5" TextAlignment="Center"></TextBlock>
             <DatePicker x:Name="DatePicker" Margin="10 10" SelectedDate="{Binding Transaction.Date, UpdateSourceTrigger=PropertyChanged}"></DatePicker>
-            <Button Content="Update Transaction" Width="150" Margin="0 20 0 0" Command="{Binding UpdateTransactionCommand}"/>
+            <Button Style="{StaticResource BlueButtonStyle}" Content="Update Transaction" Width="150" Margin="0 20 0 0" Command="{Binding UpdateTransactionCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

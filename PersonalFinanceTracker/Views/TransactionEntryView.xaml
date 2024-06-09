@@ -21,10 +21,10 @@
             <ComboBox x:Name="CategoryComboBox" Margin="10 10" ItemsSource="{Binding Categories}" SelectedItem="{Binding NewTransaction.CategoryId}" DisplayMemberPath="Name"/>
             <TextBlock Text="New Category?" Margin="0 10 0 -5" TextAlignment="Center"/>
             <TextBox x:Name="NewCategoryTextBox" Margin="10 10" Text="{Binding NewCategory, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Content="Add Category" Width="150" Margin="0 10 0 0" Command="{Binding AddCategoryCommand}"/>
+            <Button Style="{StaticResource BlueButtonStyle}" Content="Add Category" Width="150" Margin="0 10 0 0" Command="{Binding AddCategoryCommand}"/>
             <TextBlock Text="Date" Margin="0 10 0 -5" TextAlignment="Center"></TextBlock>
             <DatePicker x:Name="DatePicker" Margin="10 10" SelectedDate="{Binding NewTransaction.Date, UpdateSourceTrigger=PropertyChanged}"></DatePicker>
-            <Button Content="Add Transaction" Width="150" Margin="0 20 0 0" Command="{Binding AddTransactionCommand}"/>
+            <Button Style="{StaticResource BlueButtonStyle}" Content="Add Transaction" Width="150" Margin="0 20 0 0" Command="{Binding AddTransactionCommand}"/>
         </StackPanel>
 
         <!-- Success Message -->

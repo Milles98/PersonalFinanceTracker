@@ -15,7 +15,7 @@
             <TextBox x:Name="UsernameTextBox" Margin="10" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <TextBlock Text="Password" Margin="0 10 0 -5" TextAlignment="Center"></TextBlock>
             <TextBox x:Name="PasswordTextBox" Margin="10" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Button Content="Register" Margin="0 10 0 0" Width="100" Command="{Binding RegisterCommand}"></Button>
+            <Button Style="{StaticResource BlueButtonStyle}" Content="Register" Margin="0 10 0 0" Width="100" Command="{Binding RegisterCommand}"></Button>
         </StackPanel>
     </Grid>
 </UserControl>
