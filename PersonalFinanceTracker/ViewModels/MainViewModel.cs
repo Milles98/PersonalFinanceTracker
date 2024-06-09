@@ -42,6 +42,17 @@ namespace PersonalFinanceTracker.ViewModels
                 OnPropertyChanged(nameof(IsLoggedIn));
             }
         }
+        
+        private string _currentUsername;
+        public string CurrentUsername
+        {
+            get => _currentUsername;
+            set
+            {
+                _currentUsername = value;
+                OnPropertyChanged(nameof(CurrentUsername));
+            }
+        }
 
         private int _currentUserId;
         public ICommand ShowLoginViewCommand { get; }
@@ -52,12 +63,6 @@ namespace PersonalFinanceTracker.ViewModels
 
         public MainViewModel()
         {
-            Transactions = new ObservableCollection<Transaction>
-            {
-                new Transaction { Description = "Groceries", Amount = 50, Category = "Food", Date = DateTime.Now },
-                new Transaction { Description = "Rent", Amount = 1200, Category = "Housing", Date = DateTime.Now }
-            };
-
             ShowLoginViewCommand = new RelayCommand(_ => ShowLoginView());
             ShowRegisterViewCommand = new RelayCommand(_ => ShowRegisterView());
             ShowTransactionEntryViewCommand = new RelayCommand(_ => ShowTransactionEntryView());
@@ -103,6 +108,7 @@ namespace PersonalFinanceTracker.ViewModels
                 if (user != null)
                 {
                     _currentUserId = user.Id;
+                    CurrentUsername = username;
                     IsLoggedIn = true;
                     CurrentView = new WelcomeView { DataContext = new WelcomeViewModel(username) };
                 }
