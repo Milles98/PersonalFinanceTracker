@@ -55,6 +55,18 @@
                     </Style>
                 </Button.Style>
             </Button>
+            <TextBlock Text="{Binding CurrentUsername}" Margin="5" VerticalAlignment="Center" FontWeight="Bold" FontSize="16">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
         </StackPanel>
 
         <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
