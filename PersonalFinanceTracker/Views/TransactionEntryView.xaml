@@ -8,7 +8,11 @@
              d:DesignHeight="450" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance viewModels:TransactionEntryViewModel, IsDesignTimeCreatable=True}">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Width="300">
+        <!-- Main Content -->
+        <StackPanel x:Name="MainContent" HorizontalAlignment="Center" VerticalAlignment="Top" Width="300">
+            <StackPanel.Effect>
+                <BlurEffect Radius="{Binding IsSuccessMessageVisible, Converter={StaticResource BooleanToBlurRadiusConverter}}"/>
+            </StackPanel.Effect>
             <TextBlock Text="Description" Margin="0 10 0 -5" TextAlignment="Center"/>
             <TextBox x:Name="DescriptionTextBox" Margin="10 10" Text="{Binding NewTransaction.Description, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Amount" Margin="0 10 0 -5" TextAlignment="Center"/>
@@ -22,5 +26,12 @@
             <DatePicker x:Name="DatePicker" Margin="10 10" SelectedDate="{Binding NewTransaction.Date, UpdateSourceTrigger=PropertyChanged}"></DatePicker>
             <Button Content="Add Transaction" Width="150" Margin="0 20 0 0" Command="{Binding AddTransactionCommand}"/>
         </StackPanel>
+
+        <!-- Success Message -->
+        <Border Background="Beige" CornerRadius="10" Padding="10" Visibility="{Binding IsSuccessMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock x:Name="SuccessMessage" Text="{Binding SuccessMessage}" Foreground="Green" FontWeight="Bold"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+        </Border>
     </Grid>
 </UserControl>
