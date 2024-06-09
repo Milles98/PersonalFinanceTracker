@@ -10,10 +10,16 @@
         <ListView ItemsSource="{Binding Transactions}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding  Description}" Width="200"/>
                     <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" Width="100"/>
                     <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}" Width="100"/>
-                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="200"/>
+                    <GridViewColumn Header="Date" Width="200">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Date, StringFormat=d}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Actions">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
