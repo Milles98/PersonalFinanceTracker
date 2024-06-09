@@ -1,16 +1,14 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Forms;
 using System.Windows.Input;
-using PersonalFinanceTracker.Command;
 using PersonalFinanceTracker.Data;
+using System.Linq;
+using PersonalFinanceTracker.Command;
 
 namespace PersonalFinanceTracker.ViewModels;
 
 public class LoginViewModel : INotifyPropertyChanged
 {
     private string _username;
-
     public string Username
     {
         get => _username;
@@ -22,7 +20,6 @@ public class LoginViewModel : INotifyPropertyChanged
     }
 
     private string _password;
-
     public string Password
     {
         get => _password;
@@ -32,23 +29,20 @@ public class LoginViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Password));
         }
     }
-    
+
     public ICommand LoginCommand { get; }
     public ICommand ShowRegisterViewCommand { get; }
 
     private readonly Action _showRegisterViewAction;
-    private readonly Action _showTransactionEntryViewAction;
     private readonly Action<string> _showWelcomeViewAction;
 
-    public LoginViewModel(Action showRegisterViewAction, Action showTransactionEntryViewAction, Action<string> showWelcomeViewAction)
+    public LoginViewModel(Action showRegisterViewAction, Action<string> showWelcomeViewAction)
     {
         LoginCommand = new RelayCommand(Login);
-        ShowRegisterViewCommand = new RelayCommand(_ => _showRegisterViewAction());
-
-        _showWelcomeViewAction = showWelcomeViewAction;
+        ShowRegisterViewCommand = new RelayCommand(_ => showRegisterViewAction());
 
         _showRegisterViewAction = showRegisterViewAction;
-        _showTransactionEntryViewAction = showTransactionEntryViewAction;
+        _showWelcomeViewAction = showWelcomeViewAction;
     }
 
     private void Login(object obj)
@@ -62,24 +56,14 @@ public class LoginViewModel : INotifyPropertyChanged
             }
             else
             {
-                MessageBox.Show("Ogiltigt användarnamn eller lösenord");
+                System.Windows.MessageBox.Show("Invalid username or password.");
             }
         }
     }
 
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
     }
 }
