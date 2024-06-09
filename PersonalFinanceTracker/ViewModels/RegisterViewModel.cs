@@ -10,7 +10,6 @@ namespace PersonalFinanceTracker.ViewModels;
 public class RegisterViewModel : INotifyPropertyChanged
 {
     private string _username;
-
     public string Username
     {
         get => _username;
@@ -22,7 +21,6 @@ public class RegisterViewModel : INotifyPropertyChanged
     }
 
     private string _password;
-
     public string Password
     {
         get => _password;
@@ -35,11 +33,14 @@ public class RegisterViewModel : INotifyPropertyChanged
 
     public ICommand RegisterCommand { get; }
 
-    public RegisterViewModel()
+    private readonly Action _showLoginViewAction;
+
+    public RegisterViewModel(Action showLoginViewAction)
     {
         RegisterCommand = new RelayCommand(Register);
+        _showLoginViewAction = showLoginViewAction;
     }
-    
+
     private void Register(object obj)
     {
         using (var context = new FinanceContext())
@@ -47,21 +48,13 @@ public class RegisterViewModel : INotifyPropertyChanged
             var user = new User { Username = Username, Password = Password };
             context.Users.Add(user);
             context.SaveChanges();
+            _showLoginViewAction();
         }
     }
-    
-    public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
     }
 }
