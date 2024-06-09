@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -53,24 +54,37 @@ namespace PersonalFinanceTracker.ViewModels
         }
 
         public bool IsSuccessMessageVisible => !string.IsNullOrEmpty(SuccessMessage);
-        public ObservableCollection<string> Categories { get; set; }
+        public ObservableCollection<Category> Categories { get; set; }
         public ICommand AddTransactionCommand { get; }
         public ICommand AddCategoryCommand { get; }
-        
 
         public TransactionEntryViewModel(int currentUserId)
         {
             _currentUserId = currentUserId;
             NewTransaction = new Transaction { Date = DateTime.Now };
-            Categories = new ObservableCollection<string> { "Food", "Housing", "Utilities", "Transportation", "Health", "Insurance", "Entertainment", "Other" };
+            Categories = new ObservableCollection<Category>();
             AddTransactionCommand = new RelayCommand(AddTransaction);
             AddCategoryCommand = new RelayCommand(AddCategory);
+            LoadCategories();
             _successMessageTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
             _successMessageTimer.Tick += (sender, args) =>
             {
                 SuccessMessage = string.Empty;
                 _successMessageTimer.Stop();
             };
+        }
+
+        private void LoadCategories()
+        {
+            using (var context = new FinanceContext())
+            {
+                var categories = context.Categories.ToList();
+                Categories.Clear();
+                foreach (var category in categories)
+                {
+                    Categories.Add(category);
+                }
+            }
         }
 
         private void AddTransaction(object obj)
@@ -80,7 +94,7 @@ namespace PersonalFinanceTracker.ViewModels
                 NewTransaction.UserId = _currentUserId;
                 context.Transactions.Add(NewTransaction);
                 context.SaveChanges();
-                NewTransaction = new Transaction { Date = DateTime.Now }; 
+                NewTransaction = new Transaction { Date = DateTime.Now };
                 SuccessMessage = "Transaction added successfully!";
                 OnPropertyChanged(nameof(NewTransaction));
             }
@@ -88,12 +102,18 @@ namespace PersonalFinanceTracker.ViewModels
 
         private void AddCategory(object obj)
         {
-            if (!string.IsNullOrWhiteSpace(NewCategory) && !Categories.Contains(NewCategory))
+            if (!string.IsNullOrWhiteSpace(NewCategory) && !Categories.Any(c => c.Name == NewCategory))
             {
-                Categories.Add(NewCategory);
-                NewCategory = string.Empty;
-                SuccessMessage = "Category added successfully!";
-                OnPropertyChanged(nameof(NewCategory));
+                using (var context = new FinanceContext())
+                {
+                    var category = new Category { Name = NewCategory };
+                    context.Categories.Add(category);
+                    context.SaveChanges();
+                    Categories.Add(category);
+                    NewCategory = string.Empty;
+                    SuccessMessage = "Category added successfully!";
+                    OnPropertyChanged(nameof(NewCategory));
+                }
             }
         }
 

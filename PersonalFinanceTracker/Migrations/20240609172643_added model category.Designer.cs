@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalFinanceTracker.Data;
 
@@ -11,9 +12,11 @@ using PersonalFinanceTracker.Data;
 namespace PersonalFinanceTracker.Migrations
 {
     [DbContext(typeof(FinanceContext))]
-    partial class FinanceContextModelSnapshot : ModelSnapshot
+    [Migration("20240609172643_added model category")]
+    partial class addedmodelcategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,6 +40,48 @@ namespace PersonalFinanceTracker.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Food"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Housing"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Utilities"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Transportation"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Health"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Insurance"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Entertainment"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Other"
+                        });
                 });
 
             modelBuilder.Entity("PersonalFinanceTracker.Models.FinanceUser", b =>
@@ -71,8 +116,9 @@ namespace PersonalFinanceTracker.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -86,8 +132,6 @@ namespace PersonalFinanceTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Transactions");
@@ -95,19 +139,11 @@ namespace PersonalFinanceTracker.Migrations
 
             modelBuilder.Entity("PersonalFinanceTracker.Models.Transaction", b =>
                 {
-                    b.HasOne("PersonalFinanceTracker.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PersonalFinanceTracker.Models.FinanceUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }
