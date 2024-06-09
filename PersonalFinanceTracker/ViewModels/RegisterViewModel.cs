@@ -45,8 +45,8 @@ public class RegisterViewModel : INotifyPropertyChanged
     {
         using (var context = new FinanceContext())
         {
-            var user = new User { Username = Username, Password = Password };
-            context.Users.Add(user);
+            var user = new FinanceUser { Username = Username, Password = Password };
+            context.FinanceUsers.Add(user);
             context.SaveChanges();
             _showLoginViewAction();
         }

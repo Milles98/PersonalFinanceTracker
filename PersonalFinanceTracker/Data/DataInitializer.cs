@@ -12,15 +12,15 @@ namespace PersonalFinanceTracker.Data
         {
             context.Database.Migrate();
 
-            if (!context.Users.Any())
+            if (!context.FinanceUsers.Any())
             {
-                var user = new User
+                var user = new FinanceUser
                 {
                     Username = "Mille",
                     Password = "123"
                 };
 
-                context.Users.Add(user);
+                context.FinanceUsers.Add(user);
                 context.SaveChanges();
 
                 if (!context.Transactions.Any())
@@ -32,7 +32,7 @@ namespace PersonalFinanceTracker.Data
                             Amount = 50,
                             Category = "Food",
                             Date = DateTime.Now,
-                            UserId = user.Id // Use the generated UserId
+                            UserId = user.Id 
                         },
                         new Transaction
                         {
@@ -40,7 +40,7 @@ namespace PersonalFinanceTracker.Data
                             Amount = 1200,
                             Category = "Housing",
                             Date = DateTime.Now,
-                            UserId = user.Id // Use the generated UserId
+                            UserId = user.Id 
                         }
                     );
                 }

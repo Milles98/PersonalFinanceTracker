@@ -104,7 +104,7 @@ namespace PersonalFinanceTracker.ViewModels
         {
             using (var context = new FinanceContext())
             {
-                var user = context.Users.FirstOrDefault(u => u.Username == username);
+                var user = context.FinanceUsers.FirstOrDefault(u => u.Username == username);
                 if (user != null)
                 {
                     _currentUserId = user.Id;

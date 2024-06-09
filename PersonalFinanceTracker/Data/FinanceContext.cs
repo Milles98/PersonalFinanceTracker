@@ -5,7 +5,7 @@ namespace PersonalFinanceTracker.Data;
 
 public class FinanceContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
+    public DbSet<FinanceUser> FinanceUsers { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -16,7 +16,7 @@ public class FinanceContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Transaction>()
-            .HasOne<User>()
+            .HasOne<FinanceUser>()
             .WithMany()
             .HasForeignKey(t => t.UserId)
             .OnDelete(DeleteBehavior.Cascade);

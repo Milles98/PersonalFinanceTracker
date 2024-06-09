@@ -49,7 +49,7 @@ public class LoginViewModel : INotifyPropertyChanged
     {
         using (var context = new FinanceContext())
         {
-            var user = context.Users.FirstOrDefault(u => u.Username == Username && u.Password == Password);
+            var user = context.FinanceUsers.FirstOrDefault(u => u.Username == Username && u.Password == Password);
             if (user != null)
             {
                 _showWelcomeViewAction(user.Username);

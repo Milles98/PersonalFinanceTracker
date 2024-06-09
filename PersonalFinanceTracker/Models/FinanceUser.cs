@@ -1,6 +1,6 @@
 ﻿namespace PersonalFinanceTracker.Models;
 
-public class User
+public class FinanceUser
 {
     public int Id { get; set; }
     public string Username { get; set; }
