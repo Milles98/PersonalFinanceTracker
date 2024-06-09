@@ -53,6 +53,17 @@ namespace PersonalFinanceTracker.ViewModels
                 OnPropertyChanged(nameof(CurrentUsername));
             }
         }
+        
+        private string _headerText;
+        public string HeaderText
+        {
+            get => _headerText;
+            set
+            {
+                _headerText = value;
+                OnPropertyChanged(nameof(HeaderText));
+            }
+        }
 
         private int _currentUserId;
         public ICommand ShowLoginViewCommand { get; }
@@ -76,11 +87,13 @@ namespace PersonalFinanceTracker.ViewModels
         private void ShowLoginView()
         {
             IsLoggedIn = false;
+            HeaderText = "Welcome to the Finance Tracker";
             CurrentView = new LoginView { DataContext = new LoginViewModel(ShowRegisterView, ShowWelcomeView) };
         }
 
         private void ShowRegisterView()
         {
+            HeaderText = "Register";
             CurrentView = new RegisterView { DataContext = new RegisterViewModel(ShowLoginView) };
         }
 
