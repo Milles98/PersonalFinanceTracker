@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:PersonalFinanceTracker.Views"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="400">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
+            
+            <TextBlock Text="Welcome to the Finance Tracker" FontSize="24" FontWeight="Bold" Margin="0 0 0 20" TextAlignment="Center"></TextBlock>
+            
             <TextBlock Text="Username" Margin="10 10"></TextBlock>
             <TextBox x:Name="UsernameTextBox" Margin="10 10" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <TextBlock Text="Password" Margin="10 10"></TextBlock>
