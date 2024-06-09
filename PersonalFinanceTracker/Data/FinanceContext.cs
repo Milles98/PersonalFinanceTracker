@@ -18,6 +18,7 @@ public class FinanceContext : DbContext
         modelBuilder.Entity<Transaction>()
             .HasOne<User>()
             .WithMany()
-            .HasForeignKey(t => t.UserId);
+            .HasForeignKey(t => t.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

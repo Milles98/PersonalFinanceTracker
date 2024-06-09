@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using PersonalFinanceTracker.Command;
+using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
 using PersonalFinanceTracker.Views;
 
@@ -42,6 +43,7 @@ namespace PersonalFinanceTracker.ViewModels
             }
         }
 
+        private int _currentUserId;
         public ICommand ShowLoginViewCommand { get; }
         public ICommand ShowRegisterViewCommand { get; }
         public ICommand LogoutCommand { get; }
@@ -81,7 +83,7 @@ namespace PersonalFinanceTracker.ViewModels
         {
             if (IsLoggedIn)
             {
-                CurrentView = new TransactionEntryView { DataContext = new TransactionEntryViewModel() };
+                CurrentView = new TransactionEntryView { DataContext = new TransactionEntryViewModel(_currentUserId) };
             }
         }
 
@@ -95,13 +97,22 @@ namespace PersonalFinanceTracker.ViewModels
 
         private void ShowWelcomeView(string username)
         {
-            IsLoggedIn = true;
-            CurrentView = new WelcomeView { DataContext = new WelcomeViewModel(username) };
+            using (var context = new FinanceContext())
+            {
+                var user = context.Users.FirstOrDefault(u => u.Username == username);
+                if (user != null)
+                {
+                    _currentUserId = user.Id;
+                    IsLoggedIn = true;
+                    CurrentView = new WelcomeView { DataContext = new WelcomeViewModel(username) };
+                }
+            }
         }
 
         private void Logout()
         {
             IsLoggedIn = false;
+            _currentUserId = 0;
             ShowLoginView();
         }
 
