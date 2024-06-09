@@ -7,6 +7,7 @@ public class FinanceContext : DbContext
 {
     public DbSet<FinanceUser> FinanceUsers { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -20,5 +21,11 @@ public class FinanceContext : DbContext
             .WithMany()
             .HasForeignKey(t => t.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.Category)
+            .WithMany()
+            .HasForeignKey(t => t.CategoryId);
+        
     }
 }

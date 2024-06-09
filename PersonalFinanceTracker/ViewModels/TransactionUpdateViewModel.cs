@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using PersonalFinanceTracker.Command;
@@ -11,6 +13,7 @@ namespace PersonalFinanceTracker.ViewModels
     public class TransactionUpdateViewModel : INotifyPropertyChanged
     {
         private Transaction _transaction;
+        private readonly int _currentUserId;
 
         public Transaction Transaction
         {
@@ -22,35 +25,62 @@ namespace PersonalFinanceTracker.ViewModels
             }
         }
 
+        public ObservableCollection<Category> Categories { get; set; }
         public ICommand UpdateTransactionCommand { get; }
 
-        public TransactionUpdateViewModel(Transaction transaction)
+        public TransactionUpdateViewModel(Transaction transaction, int currentUserId)
         {
-            Transaction = transaction;
+            _transaction = transaction;
+            _currentUserId = currentUserId;
+
+            Categories = new ObservableCollection<Category>();
             UpdateTransactionCommand = new RelayCommand(UpdateTransaction);
+
+            LoadCategories();
+        }
+
+        private void LoadCategories()
+        {
+            using (var context = new FinanceContext())
+            {
+                var categories = context.Categories.ToList();
+                Categories.Clear();
+                foreach (var category in categories)
+                {
+                    Categories.Add(category);
+                }
+            }
         }
 
         private void UpdateTransaction(object obj)
         {
             using (var context = new FinanceContext())
             {
-                var existingTransaction = context.Transactions.Find(Transaction.Id);
+                var existingTransaction = context.Transactions.FirstOrDefault(t => t.Id == Transaction.Id);
                 if (existingTransaction != null)
                 {
                     existingTransaction.Description = Transaction.Description;
                     existingTransaction.Amount = Transaction.Amount;
-                    existingTransaction.Category = Transaction.Category;
+                    existingTransaction.CategoryId = Transaction.CategoryId;
                     existingTransaction.Date = Transaction.Date;
                     context.SaveChanges();
                 }
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }

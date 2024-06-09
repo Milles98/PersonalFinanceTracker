@@ -13,11 +13,12 @@ namespace PersonalFinanceTracker.ViewModels
     {
         public ObservableCollection<Transaction> Transactions { get; set; }
         public ICommand DeleteTransactionCommand { get; }
-        public ICommand UpdateTransactionCommand { get; }
+        public ICommand ShowUpdateTransactionViewCommand { get; }
 
         private readonly int _currentUserId;
         private string _successMessage;
         private bool _isSuccessMessageVisible;
+        private readonly Action<Transaction> _showUpdateTransactionViewAction;
 
         public string SuccessMessage
         {
@@ -39,12 +40,13 @@ namespace PersonalFinanceTracker.ViewModels
             }
         }
 
-        public TransactionHistoryViewModel(int currentUserId)
+        public TransactionHistoryViewModel(int currentUserId, Action<Transaction> showUpdateTransactionViewAction)
         {
             _currentUserId = currentUserId;
+            _showUpdateTransactionViewAction = showUpdateTransactionViewAction;
             Transactions = new ObservableCollection<Transaction>();
             DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
-            UpdateTransactionCommand = new RelayCommand(UpdateTransaction);
+            ShowUpdateTransactionViewCommand = new RelayCommand(ShowUpdateTransactionView);
             LoadTransactions();
         }
 
@@ -77,23 +79,11 @@ namespace PersonalFinanceTracker.ViewModels
             }
         }
 
-        private void UpdateTransaction(object obj)
+        private void ShowUpdateTransactionView(object obj)
         {
             if (obj is Transaction transaction)
             {
-                using (var context = new FinanceContext())
-                {
-                    var existingTransactions = context.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
-                    if (existingTransactions != null)
-                    {
-                        existingTransactions.Description = transaction.Description;
-                        existingTransactions.Amount = transaction.Amount;
-                        existingTransactions.Category = transaction.Category;
-                        existingTransactions.Date = transaction.Date;
-                        context.SaveChanges();
-                        ShowSuccessMessage("Transaction updated successfully!");
-                    }
-                }
+                _showUpdateTransactionViewAction(transaction);
             }
         }
 

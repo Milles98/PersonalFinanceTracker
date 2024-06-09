@@ -18,7 +18,7 @@
             <TextBlock Text="Amount" Margin="0 10 0 -5" TextAlignment="Center"/>
             <TextBox x:Name="AmountTextBox" Margin="10 10" Text="{Binding NewTransaction.Amount, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Category" Margin="0 10 0 -5" TextAlignment="Center"/>
-            <ComboBox x:Name="CategoryComboBox" Margin="10 10" ItemsSource="{Binding Categories}" SelectedItem="{Binding NewTransaction.Category}"/>
+            <ComboBox x:Name="CategoryComboBox" Margin="10 10" ItemsSource="{Binding Categories}" SelectedItem="{Binding NewTransaction.CategoryId}" DisplayMemberPath="Name"/>
             <TextBlock Text="New Category?" Margin="0 10 0 -5" TextAlignment="Center"/>
             <TextBox x:Name="NewCategoryTextBox" Margin="10 10" Text="{Binding NewCategory, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Content="Add Category" Width="150" Margin="0 10 0 0" Command="{Binding AddCategoryCommand}"/>
