@@ -32,6 +32,7 @@ public class MainViewModel : INotifyPropertyChanged
     }
     
     public ICommand ShowLoginViewCommand { get; }
+    public ICommand ShowRegisterViewCommand { get; }
     public ICommand ShowTransactionEntryViewCommand { get; }
     public ICommand ShowTransactionHistoryViewCommand { get; }
     
@@ -44,11 +45,13 @@ public class MainViewModel : INotifyPropertyChanged
         ];
 
         ShowLoginViewCommand = new RelayCommand(ShowLoginView);
+        ShowRegisterViewCommand = new RelayCommand(ShowRegisterView);
         ShowTransactionEntryViewCommand = new RelayCommand(ShowTransactionEntryView);
         ShowTransactionHistoryViewCommand = new RelayCommand(ShowTransactionHistoryView);
     }
 
     private void ShowLoginView(object obj) => CurrentView = new LoginView();
+    private void ShowRegisterView(object obj) => CurrentView = new RegisterView();
     private void ShowTransactionEntryView(object obj) => CurrentView = new TransactionEntryView();
     private void ShowTransactionHistoryView(object obj) => CurrentView = new TransactionHistoryView();
     
