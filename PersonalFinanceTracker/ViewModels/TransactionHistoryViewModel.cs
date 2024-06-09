@@ -13,9 +13,11 @@ public class TransactionHistoryViewModel : INotifyPropertyChanged
 {
     public ObservableCollection<Transaction> Transactions { get; set; }
     public ICommand DeleteTransactionCommand { get; }
+    private readonly int _currentUserId;
 
-    public TransactionHistoryViewModel()
+    public TransactionHistoryViewModel(int currentUserId)
     {
+        _currentUserId = currentUserId;
         Transactions = new ObservableCollection<Transaction>();
         DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
         LoadTransactions();
@@ -25,9 +27,11 @@ public class TransactionHistoryViewModel : INotifyPropertyChanged
     {
         using (var context = new FinanceContext())
         {
-            var transactions = context.Transactions.ToList();
+            var transactions = context.Transactions
+                .Where(u => u.UserId == _currentUserId)
+                .ToList();
             Transactions.Clear();
-            foreach (var transaction in Transactions)
+            foreach (var transaction in transactions)
             {
                 Transactions.Add(transaction);
             }
