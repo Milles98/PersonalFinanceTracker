@@ -56,6 +56,7 @@ public class MainViewModel : INotifyPropertyChanged
     private void ShowRegisterView(object obj) => CurrentView = new RegisterView();
     private void ShowTransactionEntryView(object obj) => CurrentView = new TransactionEntryView();
     private void ShowTransactionHistoryView(object obj) => CurrentView = new TransactionHistoryView();
+    private void ShowWelcomeView(string username) => CurrentView = new WelcomeViewModel(username);
     
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged(string propertyName)
