@@ -2,6 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using PersonalFinanceTracker.Command;
+using PersonalFinanceTracker.Data;
+using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.ViewModels;
 
@@ -40,9 +42,12 @@ public class RegisterViewModel : INotifyPropertyChanged
     
     private void Register(object obj)
     {
-        // Implement registration logic here
-        // For simplicity, assume registration is always successful
-        // You can add logic to save the user to a database
+        using (var context = new FinanceContext())
+        {
+            var user = new User { Username = Username, Password = Password };
+            context.Users.Add(user);
+            context.SaveChanges();
+        }
     }
     
     public event PropertyChangedEventHandler? PropertyChanged;
