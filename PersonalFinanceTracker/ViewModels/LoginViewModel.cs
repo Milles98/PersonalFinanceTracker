@@ -38,11 +38,14 @@ public class LoginViewModel : INotifyPropertyChanged
 
     private readonly Action _showRegisterViewAction;
     private readonly Action _showTransactionEntryViewAction;
+    private readonly Action<string> _showWelcomeViewAction;
 
-    public LoginViewModel(Action showRegisterViewAction, Action showTransactionEntryViewAction)
+    public LoginViewModel(Action showRegisterViewAction, Action showTransactionEntryViewAction, Action<string> showWelcomeViewAction)
     {
         LoginCommand = new RelayCommand(Login);
         ShowRegisterViewCommand = new RelayCommand(_ => _showRegisterViewAction());
+
+        _showWelcomeViewAction = showWelcomeViewAction;
 
         _showRegisterViewAction = showRegisterViewAction;
         _showTransactionEntryViewAction = showTransactionEntryViewAction;
@@ -55,7 +58,7 @@ public class LoginViewModel : INotifyPropertyChanged
             var user = context.Users.FirstOrDefault(u => u.Username == Username && u.Password == Password);
             if (user != null)
             {
-                _showTransactionEntryViewAction();
+                _showWelcomeViewAction(user.Username);
             }
             else
             {
