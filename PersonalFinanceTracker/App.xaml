@@ -1,9 +1,12 @@
 ﻿<Application x:Class="PersonalFinanceTracker.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:PersonalFinanceTracker"
+             xmlns:converters="clr-namespace:PersonalFinanceTracker.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        
+        <converters:BooleanToBlurRadiusConverter x:Key="BooleanToBlurRadiusConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         
         <!-- Global App Background -->
         <Style TargetType="Window">
