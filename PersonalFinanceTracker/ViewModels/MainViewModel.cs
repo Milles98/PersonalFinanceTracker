@@ -48,6 +48,8 @@ public class MainViewModel : INotifyPropertyChanged
         ShowRegisterViewCommand = new RelayCommand(ShowRegisterView);
         ShowTransactionEntryViewCommand = new RelayCommand(ShowTransactionEntryView);
         ShowTransactionHistoryViewCommand = new RelayCommand(ShowTransactionHistoryView);
+        
+        ShowLoginView(null);
     }
 
     private void ShowLoginView(object obj) => CurrentView = new LoginView();
