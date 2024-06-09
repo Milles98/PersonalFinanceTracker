@@ -96,7 +96,7 @@ namespace PersonalFinanceTracker.ViewModels
         {
             if (IsLoggedIn)
             {
-                CurrentView = new TransactionHistoryView { DataContext = new TransactionHistoryViewModel() };
+                CurrentView = new TransactionHistoryView { DataContext = new TransactionHistoryViewModel(_currentUserId) };
             }
         }
 
