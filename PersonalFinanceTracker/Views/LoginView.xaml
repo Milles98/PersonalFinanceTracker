@@ -7,6 +7,12 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+            <TextBlock Text="Username" Margin="10 10"></TextBlock>
+            <TextBox x:Name="UsernameTextBox" Margin="10 10"></TextBox>
+            <TextBlock Text="Password" Margin="10 10"></TextBlock>
+            <PasswordBox x:Name="PasswordBox" Margin="10 10 10 30"></PasswordBox>
+            <Button Content="Login" Width="100" Command="{Binding LoginCommand}"></Button>
+        </StackPanel>
     </Grid>
 </UserControl>

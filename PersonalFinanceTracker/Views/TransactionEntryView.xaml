@@ -7,6 +7,14 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Width="300">
+            <TextBlock Text="Description" Margin="10 10"></TextBlock>
+            <TextBox x:Name="DescriptionTextBox" Margin="10 10" Text="{Binding NewTransaction.Description, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBlock Text="Amount" Margin="10 10"></TextBlock>
+            <TextBox x:Name="AmountTextBox" Margin="10 10" Text="{Binding NewTransaction.Amount, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBlock Text="Category" Margin="10 10"></TextBlock>
+            <ComboBox x:Name="CategoryComboBox" Margin="10 10" ItemsSource="{Binding Categories}" SelectedItem="{Binding NewTransactions.Category}"></ComboBox>
+            <Button Content="Add Transaction" Width="150" Margin="0 20 0 0" Command="{Binding AddTransactionCommand}"></Button>
+        </StackPanel>
     </Grid>
 </UserControl>
