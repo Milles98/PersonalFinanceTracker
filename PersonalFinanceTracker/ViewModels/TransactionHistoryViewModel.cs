@@ -13,6 +13,7 @@ public class TransactionHistoryViewModel : INotifyPropertyChanged
 {
     public ObservableCollection<Transaction> Transactions { get; set; }
     public ICommand DeleteTransactionCommand { get; }
+    public ICommand UpdateTransactionCommand { get; }
     private readonly int _currentUserId;
 
     public TransactionHistoryViewModel(int currentUserId)
@@ -20,6 +21,7 @@ public class TransactionHistoryViewModel : INotifyPropertyChanged
         _currentUserId = currentUserId;
         Transactions = new ObservableCollection<Transaction>();
         DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
+        UpdateTransactionCommand = new RelayCommand(UpdateTransaction);
         LoadTransactions();
     }
 
@@ -47,6 +49,25 @@ public class TransactionHistoryViewModel : INotifyPropertyChanged
                 context.Transactions.Remove(transaction);
                 context.SaveChanges();
                 Transactions.Remove(transaction);
+            }
+        }
+    }
+
+    private void UpdateTransaction(object obj)
+    {
+        if (obj is Transaction transaction)
+        {
+            using (var context = new FinanceContext())
+            {
+                var existingTransactions = context.Transactions.FirstOrDefault(t => t.Id == transaction.Id);
+                if (existingTransactions != null)
+                {
+                    existingTransactions.Description = transaction.Description;
+                    existingTransactions.Amount = transaction.Amount;
+                    existingTransactions.Category = transaction.Category;
+                    existingTransactions.Date = transaction.Date;
+                    context.SaveChanges();
+                }
             }
         }
     }
