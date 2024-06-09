@@ -11,16 +11,18 @@
         <viewModels:MainViewModel/>
     </Window.DataContext>
     <Grid>
-        <ListView ItemsSource="{Binding Transactions}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"></GridViewColumn>
-                    <GridViewColumn Header="Amount" DisplayMemberBinding="{Binding Amount}" Width="100"></GridViewColumn>
-                    <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Category}" Width="200"></GridViewColumn>
-                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="200"></GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button Content="Login" Command="{Binding ShowLoginViewCommand}" Margin="5"></Button>
+            <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5"></Button>
+            <Button Content="Transaction History" Command="{Binding ShowTransactionHistoryViewCommand}" Margin="5"></Button>
+        </StackPanel>
+        
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"></ContentControl>
     </Grid>
 </Window>
 
