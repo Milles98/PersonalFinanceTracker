@@ -108,6 +108,7 @@ public class TransactionHistoryViewModel : INotifyPropertyChanged
             transaction.Description = updatedTransaction.Description;
             transaction.Amount = updatedTransaction.Amount;
             transaction.CategoryId = updatedTransaction.CategoryId;
+            transaction.Category = updatedTransaction.Category;
             transaction.Date = updatedTransaction.Date;
             OnPropertyChanged(nameof(Transactions));
         }
