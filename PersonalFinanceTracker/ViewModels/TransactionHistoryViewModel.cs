@@ -1,23 +1,22 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Command;
-using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
+using PersonalFinanceTracker.Services;
 using PersonalFinanceTracker.ViewModels;
 
 public class TransactionHistoryViewModel : INotifyPropertyChanged
 {
-    public ObservableCollection<Transaction> Transactions { get; set; }
-    public ICommand DeleteTransactionCommand { get; }
-    public ICommand ShowUpdateTransactionViewCommand { get; }
-
+    private readonly ITransactionService _transactionService;
     private readonly int _currentUserId;
     private string _successMessage;
     private bool _isSuccessMessageVisible;
     private readonly Action<TransactionUpdateViewModel> _showUpdateTransactionViewAction;
+
+    public ObservableCollection<Transaction> Transactions { get; set; }
+    public ICommand DeleteTransactionCommand { get; }
+    public ICommand ShowUpdateTransactionViewCommand { get; }
 
     public string SuccessMessage
     {
@@ -39,43 +38,23 @@ public class TransactionHistoryViewModel : INotifyPropertyChanged
         }
     }
 
-    public TransactionHistoryViewModel(int currentUserId, Action<TransactionUpdateViewModel> showUpdateTransactionViewAction)
+    public TransactionHistoryViewModel(ITransactionService transactionService, int currentUserId, Action<TransactionUpdateViewModel> showUpdateTransactionViewAction)
     {
+        _transactionService = transactionService;
         _currentUserId = currentUserId;
         _showUpdateTransactionViewAction = showUpdateTransactionViewAction;
-        Transactions = new ObservableCollection<Transaction>();
+        Transactions = new ObservableCollection<Transaction>(_transactionService.GetTransactionsByUserId(_currentUserId));
         DeleteTransactionCommand = new RelayCommand(DeleteTransaction);
         ShowUpdateTransactionViewCommand = new RelayCommand(ShowUpdateTransactionView);
-        LoadTransactions();
     }
 
-    private void LoadTransactions()
-    {
-        using (var context = new FinanceContext())
-        {
-            var transactions = context.Transactions
-                .Where(u => u.UserId == _currentUserId)
-                .Include(c => c.Category)
-                .ToList();
-            Transactions.Clear();
-            foreach (var transaction in transactions)
-            {
-                Transactions.Add(transaction);
-            }
-        }
-    }
-    
     private void DeleteTransaction(object obj)
     {
         if (obj is Transaction transaction)
         {
-            using (var context = new FinanceContext())
-            {
-                context.Transactions.Remove(transaction);
-                context.SaveChanges();
-                Transactions.Remove(transaction);
-                ShowSuccessMessage("Transaction deleted successfully!");
-            }
+            _transactionService.DeleteTransaction(transaction);
+            Transactions.Remove(transaction);
+            ShowSuccessMessage("Transaction deleted successfully!");
         }
     }
 
@@ -99,7 +78,7 @@ public class TransactionHistoryViewModel : INotifyPropertyChanged
         await Task.Delay(2000);
         IsSuccessMessageVisible = false;
     }
-    
+
     public void UpdateTransactionInList(Transaction updatedTransaction)
     {
         var transaction = Transactions.FirstOrDefault(t => t.Id == updatedTransaction.Id);
@@ -114,18 +93,9 @@ public class TransactionHistoryViewModel : INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
     }
 }
