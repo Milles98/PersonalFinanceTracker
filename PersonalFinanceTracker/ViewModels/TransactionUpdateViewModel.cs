@@ -28,10 +28,13 @@ namespace PersonalFinanceTracker.ViewModels
         public ObservableCollection<Category> Categories { get; set; }
         public ICommand UpdateTransactionCommand { get; }
 
-        public TransactionUpdateViewModel(Transaction transaction, int currentUserId)
+        public Action<Transaction> OnTransactionUpdated { get; set; }
+
+        public TransactionUpdateViewModel(Transaction transaction, int currentUserId, Action<Transaction> onTransactionUpdated)
         {
             _transaction = transaction;
             _currentUserId = currentUserId;
+            OnTransactionUpdated = onTransactionUpdated;
 
             Categories = new ObservableCollection<Category>();
             UpdateTransactionCommand = new RelayCommand(UpdateTransaction);
@@ -64,6 +67,8 @@ namespace PersonalFinanceTracker.ViewModels
                     existingTransaction.CategoryId = Transaction.CategoryId;
                     existingTransaction.Date = Transaction.Date;
                     context.SaveChanges();
+                    
+                    OnTransactionUpdated?.Invoke(existingTransaction);
                 }
             }
         }

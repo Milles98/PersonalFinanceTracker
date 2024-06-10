@@ -111,10 +111,11 @@ namespace PersonalFinanceTracker.ViewModels
             }
         }
         
-        private void ShowTransactionUpdateView(Transaction transaction)
+        private void ShowTransactionUpdateView(TransactionUpdateViewModel updateViewModel)
         {
-            CurrentView = new TransactionUpdateView { DataContext = new TransactionUpdateViewModel(transaction, _currentUserId) };
+            CurrentView = new TransactionUpdateView { DataContext = updateViewModel };
         }
+
 
         private void ShowWelcomeView(string username)
         {
