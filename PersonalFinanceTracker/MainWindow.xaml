@@ -21,10 +21,9 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
-            <Button>
-                <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5" />
+                <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5" >
                 <Button.Style>
-                    <Style TargetType="Button">
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
@@ -34,10 +33,9 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button>
-            <Button Content="Transaction History" Command="{Binding ShowTransactionHistoryViewCommand}" Margin="5" />
+            <Button Content="Transaction History" Command="{Binding ShowTransactionHistoryViewCommand}" Margin="5" >
                 <Button.Style>
-                    <Style TargetType="Button">
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
@@ -47,10 +45,9 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button>
-            <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5" />
+            <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5" >
                 <Button.Style>
-                    <Style TargetType="Button">
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
