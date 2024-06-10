@@ -57,9 +57,9 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <TextBlock Text="{Binding CurrentUsername}" Margin="5" VerticalAlignment="Center" FontWeight="Bold" FontSize="16">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
+            <Button Content="{Binding CurrentUsername}" Command="{Binding ShowUserProfileCommand}" Margin="5" VerticalAlignment="Center" FontWeight="Bold" FontSize="16">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
@@ -67,8 +67,8 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                </Button.Style>
+            </Button>
         </StackPanel>
 
         <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
