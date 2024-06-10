@@ -8,6 +8,8 @@
              d:DesignHeight="400" d:DesignWidth="400"
              d:DataContext="{d:DesignInstance viewModels:LoginViewModel, IsDesignTimeCreatable=True}">
     <Grid>
+        
+        
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
             
             <TextBlock Text="Welcome to the Finance Tracker" FontSize="24" FontWeight="Bold" Margin="0 0 0 20" TextAlignment="Center"></TextBlock>
