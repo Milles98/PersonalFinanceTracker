@@ -1,7 +1,7 @@
-﻿using PersonalFinanceTracker.Data;
-using PersonalFinanceTracker.Models;
+﻿using PersonalFinanceTracker.Models;
 using PersonalFinanceTracker.Repository;
-using PersonalFinanceTracker.Services;
+
+namespace PersonalFinanceTracker.Services;
 
 public class UserService : IUserService
 {
@@ -15,7 +15,6 @@ public class UserService : IUserService
     public bool UpdateProfile(int userId, string username)
     {
         var user = _userRepository.GetUserById(userId);
-        if (user == null) return false;
 
         user.Username = username;
         _userRepository.UpdateUser(user);
@@ -25,7 +24,6 @@ public class UserService : IUserService
     public bool ChangePassword(int userId, string newPassword)
     {
         var user = _userRepository.GetUserById(userId);
-        if (user == null) return false;
 
         user.Password = newPassword;
         _userRepository.UpdateUser(user);
@@ -35,7 +33,7 @@ public class UserService : IUserService
     public bool VerifyPassword(int userId, string password)
     {
         var user = _userRepository.GetUserById(userId);
-        return user != null && user.Password == password;
+        return user.Password == password;
     }
     
     public FinanceUser GetUserByUsername(string username) 
