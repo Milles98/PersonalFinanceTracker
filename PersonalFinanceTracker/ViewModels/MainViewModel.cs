@@ -4,12 +4,14 @@ using System.Windows.Input;
 using PersonalFinanceTracker.Command;
 using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
+using PersonalFinanceTracker.Services;
 using PersonalFinanceTracker.Views;
 
 namespace PersonalFinanceTracker.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private readonly IUserService _userService;
         private ObservableCollection<Transaction> _transactions;
         public ObservableCollection<Transaction> Transactions
         {
@@ -64,6 +66,8 @@ namespace PersonalFinanceTracker.ViewModels
 
         public MainViewModel()
         {
+            _userService = new UserService();
+            
             ShowUserProfileCommand = new RelayCommand(_ => ShowUserProfile());
             ShowLoginViewCommand = new RelayCommand(_ => ShowLoginView());
             ShowRegisterViewCommand = new RelayCommand(_ => ShowRegisterView());
@@ -77,7 +81,7 @@ namespace PersonalFinanceTracker.ViewModels
 
         private void ShowUserProfile()
         {
-            CurrentView = new UserProfileView { DataContext = new UserProfileViewModel()};
+            CurrentView = new UserProfileView { DataContext = new UserProfileViewModel(_userService, _currentUserId)};
         }
 
         private void ShowLoginView()

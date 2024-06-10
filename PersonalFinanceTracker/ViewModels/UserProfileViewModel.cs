@@ -1,14 +1,20 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using PersonalFinanceTracker.Command;
+using PersonalFinanceTracker.Services;
 
 namespace PersonalFinanceTracker.ViewModels
 {
     public class UserProfileViewModel : INotifyPropertyChanged
     {
+        private readonly IUserService _userService;
         private string _username;
-        private string _password;
+        private string _currentPassword;
+        private string _newPassword;
+        private string _confirmPassword;
+        private int _userId;
 
         public string Username
         {
@@ -20,12 +26,32 @@ namespace PersonalFinanceTracker.ViewModels
             }
         }
 
-        public string Password
+        public string CurrentPassword
         {
-            get { return _password; }
+            get { return _currentPassword; }
             set
             {
-                _password = value;
+                _currentPassword = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NewPassword
+        {
+            get { return _newPassword; }
+            set
+            {
+                _newPassword = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ConfirmPassword
+        {
+            get { return _confirmPassword; }
+            set
+            {
+                _confirmPassword = value;
                 OnPropertyChanged();
             }
         }
@@ -33,20 +59,52 @@ namespace PersonalFinanceTracker.ViewModels
         public ICommand UpdateProfileCommand { get; }
         public ICommand ChangePasswordCommand { get; }
 
-        public UserProfileViewModel()
+        public UserProfileViewModel(IUserService userService, int userId)
         {
-            UpdateProfileCommand = new RelayCommand(_ =>UpdateProfile());
-            ChangePasswordCommand = new RelayCommand(_ =>ChangePassword());
+            _userService = userService;
+            _userId = userId;
+
+            UpdateProfileCommand = new RelayCommand(_ => UpdateProfile());
+            ChangePasswordCommand = new RelayCommand(_ => ChangePassword());
         }
 
         private void UpdateProfile()
         {
-            // Logic to update profile
+            if (_userService.VerifyPassword(_userId, _currentPassword))
+            {
+                var success = _userService.UpdateProfile(_userId, _username);
+                if (success)
+                {
+                    MessageBox.Show("Username updated successfully.");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to update username.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Incorrect password.");
+            }
         }
 
         private void ChangePassword()
         {
-            // Logic to change password
+            if (_newPassword != _confirmPassword)
+            {
+                MessageBox.Show("New passwords do not match.");
+                return;
+            }
+
+            var success = _userService.ChangePassword(_userId, _newPassword);
+            if (success)
+            {
+                MessageBox.Show("Password changed successfully.");
+            }
+            else
+            {
+                MessageBox.Show("Failed to change password.");
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -54,14 +112,6 @@ namespace PersonalFinanceTracker.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
         }
     }
 }
