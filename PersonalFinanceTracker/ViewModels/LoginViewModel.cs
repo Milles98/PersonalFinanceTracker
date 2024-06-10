@@ -3,12 +3,17 @@ using System.Windows.Input;
 using PersonalFinanceTracker.Data;
 using System.Linq;
 using PersonalFinanceTracker.Command;
+using PersonalFinanceTracker.Services;
 
 namespace PersonalFinanceTracker.ViewModels;
 
 public class LoginViewModel : INotifyPropertyChanged
 {
     private string _username;
+    private string _password;
+    private readonly IUserService _userService;
+    private readonly Action<string> _showWelcomeViewAction;
+
     public string Username
     {
         get => _username;
@@ -19,7 +24,6 @@ public class LoginViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _password;
     public string Password
     {
         get => _password;
@@ -31,33 +35,24 @@ public class LoginViewModel : INotifyPropertyChanged
     }
 
     public ICommand LoginCommand { get; }
-    public ICommand ShowRegisterViewCommand { get; }
 
-    private readonly Action _showRegisterViewAction;
-    private readonly Action<string> _showWelcomeViewAction;
-
-    public LoginViewModel(Action showRegisterViewAction, Action<string> showWelcomeViewAction)
+    public LoginViewModel(IUserService userService, Action<string> showWelcomeViewAction)
     {
-        LoginCommand = new RelayCommand(Login);
-        ShowRegisterViewCommand = new RelayCommand(_ => showRegisterViewAction());
-
-        _showRegisterViewAction = showRegisterViewAction;
+        _userService = userService;
         _showWelcomeViewAction = showWelcomeViewAction;
+        LoginCommand = new RelayCommand(Login);
     }
 
     private void Login(object obj)
     {
-        using (var context = new FinanceContext())
+        var user = _userService.GetUserByUsernameAndPassword(Username, Password);
+        if (user != null)
         {
-            var user = context.FinanceUsers.FirstOrDefault(u => u.Username == Username && u.Password == Password);
-            if (user != null)
-            {
-                _showWelcomeViewAction(user.Username);
-            }
-            else
-            {
-                System.Windows.MessageBox.Show("Invalid username or password.");
-            }
+            _showWelcomeViewAction(user.Username);
+        }
+        else
+        {
+            System.Windows.MessageBox.Show("Invalid username or password.");
         }
     }
 
