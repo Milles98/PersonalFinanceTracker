@@ -15,18 +15,18 @@
             <!-- Update Username Section -->
             <TextBlock Text="Update Username" FontSize="16" FontWeight="Bold" Margin="10,20,10,5" TextAlignment="Center"/>
             <TextBlock Text="New Username" Margin="0,5,0,0" TextAlignment="Center"/>
-            <TextBox Text="{Binding Username}" Margin="10"/>
+            <TextBox Width="300" Text="{Binding Username}" Margin="10"/>
             <TextBlock Text="Current Password" Margin="0,5,0,0" TextAlignment="Center"/>
-            <PasswordBox helpers:PasswordBoxHelper.BoundPassword="{Binding CurrentPassword}" Margin="10"/>
-            <Button Style="{StaticResource BlueButtonStyle}" Content="Update Username" Command="{Binding UpdateProfileCommand}" Margin="10"/>
+            <PasswordBox Width="300" helpers:PasswordBoxHelper.BoundPassword="{Binding CurrentPassword}" Margin="10"/>
+            <Button Width="150" Style="{StaticResource BlueButtonStyle}" Content="Update Username" Command="{Binding UpdateProfileCommand}" Margin="10"/>
 
             <!-- Change Password Section -->
             <TextBlock Text="Change Password" FontSize="16" FontWeight="Bold" Margin="20,20,10,5" TextAlignment="Center"/>
             <TextBlock Text="New Password" Margin="0,5,0,0" TextAlignment="Center"/>
-            <PasswordBox helpers:PasswordBoxHelper.BoundPassword="{Binding NewPassword}" Margin="10"/>
+            <PasswordBox Width="300" helpers:PasswordBoxHelper.BoundPassword="{Binding NewPassword}" Margin="10"/>
             <TextBlock Text="Confirm New Password" Margin="0,5,0,0" TextAlignment="Center"/>
-            <PasswordBox helpers:PasswordBoxHelper.BoundPassword="{Binding ConfirmPassword}" Margin="10"/>
-            <Button Content="Change Password" Command="{Binding ChangePasswordCommand}" Margin="10"/>
+            <PasswordBox Width="300" helpers:PasswordBoxHelper.BoundPassword="{Binding ConfirmPassword}" Margin="10"/>
+            <Button Width="150" Content="Change Password" Command="{Binding ChangePasswordCommand}" Margin="10"/>
         </StackPanel>
     </Grid>
 </UserControl>
