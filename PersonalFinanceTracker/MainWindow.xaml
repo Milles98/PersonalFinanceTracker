@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:PersonalFinanceTracker.ViewModels"
         mc:Ignorable="d"
-        Title="Finance Tracker" Height="600" Width="800">
+        Title="Finance Tracker" Height="700" Width="800">
     <Window.DataContext>
         <viewModels:MainViewModel />
     </Window.DataContext>

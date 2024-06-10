@@ -150,7 +150,7 @@
                             <BeginStoryboard>
                                 <Storyboard>
                                     <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="LightSkyBlue" Duration="0:0:0.3"/>
+                                                    To="RoyalBlue" Duration="0:0:0.3"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </Trigger.ExitActions>
