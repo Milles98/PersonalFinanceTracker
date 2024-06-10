@@ -23,7 +23,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
                 <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5" >
                 <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Style TargetType="Button" BasedOn="{StaticResource BlueButtonStyle}">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
@@ -57,7 +57,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Content="{Binding CurrentUsername}" Command="{Binding ShowUserProfileCommand}" Margin="5" VerticalAlignment="Center" FontWeight="Bold" FontSize="16">
+            <Button Content="{Binding CurrentUsername}" Command="{Binding ShowUserProfileCommand}" Margin="5" VerticalAlignment="Center">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
