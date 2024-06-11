@@ -17,6 +17,7 @@ namespace PersonalFinanceTracker.ViewModels
         private string _successMessage;
         private readonly DispatcherTimer _successMessageTimer;
         private readonly int _currentUserId;
+        private readonly Action _reloadDataCallback;
 
         public IncomeEntry NewEntry
         {
@@ -46,11 +47,25 @@ namespace PersonalFinanceTracker.ViewModels
         public bool IsSuccessMessageVisible => !string.IsNullOrEmpty(SuccessMessage);
         public ICommand AddEntryCommand { get; }
 
-        public IncomeEntryViewModel(int currentUserId)
+        private ObservableCollection<IncomeEntry> _incomeEntries;
+        public ObservableCollection<IncomeEntry> IncomeEntries
+        {
+            get => _incomeEntries;
+            set
+            {
+                _incomeEntries = value;
+                OnPropertyChanged(nameof(IncomeEntries));
+            }
+        }
+
+        public IncomeEntryViewModel(int currentUserId, Action reloadDataCallback)
         {
             _currentUserId = currentUserId;
+            _reloadDataCallback = reloadDataCallback;
             NewEntry = new IncomeEntry { Date = DateTime.Now };
             AddEntryCommand = new RelayCommand(AddEntry);
+            LoadIncomeEntries();
+
             _successMessageTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
             _successMessageTimer.Tick += (sender, args) =>
             {
@@ -68,7 +83,17 @@ namespace PersonalFinanceTracker.ViewModels
                 context.SaveChanges();
                 NewEntry = new IncomeEntry { Date = DateTime.Now };
                 SuccessMessage = "Income entry added successfully!";
+                LoadIncomeEntries();
+                _reloadDataCallback();
                 OnPropertyChanged(nameof(NewEntry));
+            }
+        }
+
+        private void LoadIncomeEntries()
+        {
+            using (var context = new FinanceContext())
+            {
+                IncomeEntries = new ObservableCollection<IncomeEntry>(context.IncomeEntries.Where(ie => ie.UserId == _currentUserId).ToList());
             }
         }
 
