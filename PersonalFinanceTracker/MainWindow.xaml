@@ -82,8 +82,21 @@
                 </Button.Style>
             </Button>
         </StackPanel>
-
-        <TextBlock Text="{Binding RemainingBalance, StringFormat='Remaining Balance: {0:C}'}" Margin="10" FontSize="16" FontWeight="Bold" Foreground="Green" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
+        
+        <!-- Remaining Balance TextBlock -->
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <TextBlock Text="{Binding RemainingBalance, StringFormat='Remaining Balance: {0:C}'}" Margin="10" FontSize="16" FontWeight="Bold" Foreground="Green" />
+        </StackPanel>
 
         <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
     </Grid>
