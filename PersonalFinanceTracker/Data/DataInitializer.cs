@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Data
@@ -58,6 +56,34 @@ namespace PersonalFinanceTracker.Data
                             CategoryId = housingCategory.Id,
                             Date = DateTime.Now,
                             UserId = user.Id 
+                        }
+                    );
+                    context.SaveChanges();
+                }
+
+                if (!context.IncomeExpenseEntries.Any())
+                {
+                    var foodCategory = context.Categories.First(c => c.Name == "Food");
+                    var salaryCategory = context.Categories.First(c => c.Name == "Other");
+
+                    context.IncomeExpenseEntries.AddRange(
+                        new IncomeExpenseEntry
+                        {
+                            Description = "Salary",
+                            Amount = 3000,
+                            CategoryId = salaryCategory.Id,
+                            Date = DateTime.Now,
+                            UserId = user.Id,
+                            Type = "Income"
+                        },
+                        new IncomeExpenseEntry
+                        {
+                            Description = "Dinner at restaurant",
+                            Amount = 100,
+                            CategoryId = foodCategory.Id,
+                            Date = DateTime.Now,
+                            UserId = user.Id,
+                            Type = "Expense"
                         }
                     );
                     context.SaveChanges();
