@@ -12,6 +12,7 @@ public class MainViewModel : INotifyPropertyChanged
 {
     private readonly IUserService _userService;
     private ObservableCollection<Transaction> _transactions;
+
     public ObservableCollection<Transaction> Transactions
     {
         get => _transactions;
@@ -22,8 +23,20 @@ public class MainViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(RemainingBalance));
         }
     }
-    
+
+    public decimal RemainingBalance
+    {
+        get
+        {
+            var currentDate = DateTime.Now;
+            var totalIncome = IncomeEntries?.Where(ie => ie.Date <= currentDate).Sum(ie => ie.Amount) ?? 0;
+            var totalExpenses = Transactions?.Sum(t => t.Amount) ?? 0;
+            return totalIncome - totalExpenses;
+        }
+    }
+
     private ObservableCollection<IncomeEntry> _incomeEntries;
+
     public ObservableCollection<IncomeEntry> IncomeEntries
     {
         get => _incomeEntries;
@@ -31,11 +44,12 @@ public class MainViewModel : INotifyPropertyChanged
         {
             _incomeEntries = value;
             OnPropertyChanged(nameof(IncomeEntries));
-            OnPropertyChanged(nameof(RemainingBalance)); 
+            OnPropertyChanged(nameof(RemainingBalance));
         }
     }
 
     private object _currentView;
+
     public object CurrentView
     {
         get => _currentView;
@@ -47,6 +61,7 @@ public class MainViewModel : INotifyPropertyChanged
     }
 
     private bool _isLoggedIn;
+
     public bool IsLoggedIn
     {
         get => _isLoggedIn;
@@ -56,8 +71,9 @@ public class MainViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(IsLoggedIn));
         }
     }
-    
+
     private string _currentUsername;
+
     public string CurrentUsername
     {
         get => _currentUsername;
@@ -80,7 +96,7 @@ public class MainViewModel : INotifyPropertyChanged
     public MainViewModel()
     {
         _userService = new UserService();
-        
+
         ShowUserProfileCommand = new RelayCommand(_ => ShowUserProfile());
         ShowLoginViewCommand = new RelayCommand(_ => ShowLoginView());
         ShowRegisterViewCommand = new RelayCommand(_ => ShowRegisterView());
@@ -93,22 +109,19 @@ public class MainViewModel : INotifyPropertyChanged
         ShowLoginView();
     }
 
-    public decimal RemainingBalance
-    {
-        get
-        {
-            var totalIncome = IncomeEntries?.Sum(ie => ie.Amount) ?? 0;
-            var totalExpenses = Transactions?.Sum(t => t.Amount) ?? 0;
-            return totalIncome - totalExpenses;
-        }
-    }
-
-    public void ReloadData()
+    private void ReloadData()
     {
         using (var context = new FinanceContext())
         {
-            Transactions = new ObservableCollection<Transaction>(context.Transactions.Where(t => t.UserId == _currentUserId).ToList());
-            IncomeEntries = new ObservableCollection<IncomeEntry>(context.IncomeEntries.Where(ie => ie.UserId == _currentUserId).ToList());
+            var currentDate = DateTime.Now;
+            Transactions =
+                new ObservableCollection<Transaction>(context.Transactions
+                    .Where(t => t.UserId == _currentUserId)
+                    .ToList());
+            IncomeEntries =
+                new ObservableCollection<IncomeEntry>(context.IncomeEntries
+                    .Where(ie => ie.UserId == _currentUserId && ie.Date <= currentDate)
+                    .ToList());
         }
     }
 
@@ -140,7 +153,7 @@ public class MainViewModel : INotifyPropertyChanged
     {
         if (IsLoggedIn)
         {
-            CurrentView = new TransactionEntryView { DataContext = new TransactionEntryViewModel(_currentUserId) };
+            CurrentView = new TransactionEntryView { DataContext = new TransactionEntryViewModel(_currentUserId, ReloadData) };
         }
     }
 
@@ -148,10 +161,11 @@ public class MainViewModel : INotifyPropertyChanged
     {
         if (IsLoggedIn)
         {
-            CurrentView = new TransactionHistoryView { DataContext = new TransactionHistoryViewModel(_currentUserId, ShowTransactionUpdateView) };
+            CurrentView = new TransactionHistoryView
+                { DataContext = new TransactionHistoryViewModel(_currentUserId, ShowTransactionUpdateView) };
         }
     }
-    
+
     private void ShowTransactionUpdateView(TransactionUpdateViewModel updateViewModel)
     {
         CurrentView = new TransactionUpdateView { DataContext = updateViewModel };
@@ -181,6 +195,7 @@ public class MainViewModel : INotifyPropertyChanged
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
+
     protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
