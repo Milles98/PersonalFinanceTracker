@@ -45,6 +45,18 @@
                     </Style>
                 </Button.Style>
             </Button>
+            <Button Content="Income and Expense Entries" Command="{Binding ShowIncomeExpenseEntryViewCommand}" Margin="5">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource BlueButtonStyle}">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5" >
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">

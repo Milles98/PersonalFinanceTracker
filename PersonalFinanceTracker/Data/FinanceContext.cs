@@ -8,6 +8,7 @@ public class FinanceContext : DbContext
     public DbSet<FinanceUser> FinanceUsers { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<IncomeExpenseEntry> IncomeExpenseEntries { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

@@ -63,6 +63,7 @@ namespace PersonalFinanceTracker.ViewModels
         public ICommand ShowTransactionEntryViewCommand { get; }
         public ICommand ShowTransactionHistoryViewCommand { get; }
         public ICommand ShowUserProfileCommand { get; }
+        public ICommand ShowIncomeExpenseEntryViewCommand { get; }
 
         public MainViewModel()
         {
@@ -73,15 +74,24 @@ namespace PersonalFinanceTracker.ViewModels
             ShowRegisterViewCommand = new RelayCommand(_ => ShowRegisterView());
             ShowTransactionEntryViewCommand = new RelayCommand(_ => ShowTransactionEntryView());
             ShowTransactionHistoryViewCommand = new RelayCommand(_ => ShowTransactionHistoryView());
+            ShowIncomeExpenseEntryViewCommand = new RelayCommand(_ => ShowIncomeExpenseEntryView());
             LogoutCommand = new RelayCommand(_ => Logout());
 
             // Set initial view
             ShowLoginView();
         }
 
+        private void ShowIncomeExpenseEntryView()
+        {
+            if (IsLoggedIn)
+            {
+                CurrentView = new IncomeExpenseEntryView { DataContext = new IncomeExpenseEntryViewModel(_currentUserId) };
+            }
+        }
+
         private void ShowUserProfile()
         {
-            CurrentView = new UserProfileView { DataContext = new UserProfileViewModel(_userService, _currentUserId)};
+            CurrentView = new UserProfileView { DataContext = new UserProfileViewModel(_userService, _currentUserId) };
         }
 
         private void ShowLoginView()
@@ -115,7 +125,6 @@ namespace PersonalFinanceTracker.ViewModels
         {
             CurrentView = new TransactionUpdateView { DataContext = updateViewModel };
         }
-
 
         private void ShowWelcomeView(string username)
         {
