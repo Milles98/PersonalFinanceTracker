@@ -11,14 +11,14 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.ViewModels
 {
-    public class IncomeExpenseEntryViewModel : INotifyPropertyChanged
+    public class IncomeEntryViewModel : INotifyPropertyChanged
     {
-        private IncomeExpenseEntry _newEntry;
+        private IncomeEntry _newEntry;
         private string _successMessage;
         private readonly DispatcherTimer _successMessageTimer;
         private readonly int _currentUserId;
 
-        public IncomeExpenseEntry NewEntry
+        public IncomeEntry NewEntry
         {
             get => _newEntry;
             set
@@ -44,18 +44,13 @@ namespace PersonalFinanceTracker.ViewModels
         }
 
         public bool IsSuccessMessageVisible => !string.IsNullOrEmpty(SuccessMessage);
-        public ObservableCollection<Category> Categories { get; set; }
-        public ObservableCollection<string> EntryTypes { get; set; }
         public ICommand AddEntryCommand { get; }
 
-        public IncomeExpenseEntryViewModel(int currentUserId)
+        public IncomeEntryViewModel(int currentUserId)
         {
             _currentUserId = currentUserId;
-            NewEntry = new IncomeExpenseEntry { Date = DateTime.Now };
-            Categories = new ObservableCollection<Category>();
-            EntryTypes = new ObservableCollection<string> { "Income", "Expense" };
+            NewEntry = new IncomeEntry { Date = DateTime.Now };
             AddEntryCommand = new RelayCommand(AddEntry);
-            LoadCategories();
             _successMessageTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
             _successMessageTimer.Tick += (sender, args) =>
             {
@@ -64,28 +59,15 @@ namespace PersonalFinanceTracker.ViewModels
             };
         }
 
-        private void LoadCategories()
-        {
-            using (var context = new FinanceContext())
-            {
-                var categories = context.Categories.ToList();
-                Categories.Clear();
-                foreach (var category in categories)
-                {
-                    Categories.Add(category);
-                }
-            }
-        }
-
         private void AddEntry(object obj)
         {
             using (var context = new FinanceContext())
             {
                 NewEntry.UserId = _currentUserId;
-                context.IncomeExpenseEntries.Add(NewEntry);
+                context.IncomeEntries.Add(NewEntry);
                 context.SaveChanges();
-                NewEntry = new IncomeExpenseEntry { Date = DateTime.Now };
-                SuccessMessage = "Entry added successfully!";
+                NewEntry = new IncomeEntry { Date = DateTime.Now };
+                SuccessMessage = "Income entry added successfully!";
                 OnPropertyChanged(nameof(NewEntry));
             }
         }

@@ -2,9 +2,9 @@
 
 namespace PersonalFinanceTracker.Views;
 
-public partial class IncomeExpenseEntryView : UserControl
+public partial class IncomeEntryView : UserControl
 {
-    public IncomeExpenseEntryView()
+    public IncomeEntryView()
     {
         InitializeComponent();
     }
