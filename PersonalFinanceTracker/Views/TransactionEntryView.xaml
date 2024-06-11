@@ -13,7 +13,7 @@
             <StackPanel.Effect>
                 <BlurEffect Radius="{Binding IsSuccessMessageVisible, Converter={StaticResource BooleanToBlurRadiusConverter}}"/>
             </StackPanel.Effect>
-            <TextBlock Text="Description" Margin="0 10 0 -5" TextAlignment="Center"/>
+            <TextBlock Text="Description" Margin="0 40 0 -5" TextAlignment="Center"/>
             <TextBox x:Name="DescriptionTextBox" Margin="10 10" Text="{Binding NewTransaction.Description, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Amount" Margin="0 10 0 -5" TextAlignment="Center"/>
             <TextBox x:Name="AmountTextBox" Margin="10 10" Text="{Binding NewTransaction.Amount, UpdateSourceTrigger=PropertyChanged}"/>
