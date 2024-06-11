@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using PersonalFinanceTracker.Command;
 using PersonalFinanceTracker.Data;
@@ -63,7 +64,7 @@ namespace PersonalFinanceTracker.ViewModels
         public ICommand ShowTransactionEntryViewCommand { get; }
         public ICommand ShowTransactionHistoryViewCommand { get; }
         public ICommand ShowUserProfileCommand { get; }
-        public ICommand ShowIncomeExpenseEntryViewCommand { get; }
+        public ICommand ShowIncomeEntryViewCommand { get; }
 
         public MainViewModel()
         {
@@ -74,18 +75,31 @@ namespace PersonalFinanceTracker.ViewModels
             ShowRegisterViewCommand = new RelayCommand(_ => ShowRegisterView());
             ShowTransactionEntryViewCommand = new RelayCommand(_ => ShowTransactionEntryView());
             ShowTransactionHistoryViewCommand = new RelayCommand(_ => ShowTransactionHistoryView());
-            ShowIncomeExpenseEntryViewCommand = new RelayCommand(_ => ShowIncomeExpenseEntryView());
+            ShowIncomeEntryViewCommand = new RelayCommand(_ => ShowIncomeEntryView());
             LogoutCommand = new RelayCommand(_ => Logout());
 
             // Set initial view
             ShowLoginView();
         }
 
-        private void ShowIncomeExpenseEntryView()
+        public decimal RemainingBalance
+        {
+            get
+            {
+                using (var context = new FinanceContext())
+                {
+                    var totalIncome = context.IncomeEntries.Where(ie => ie.UserId == _currentUserId).Sum(ie => ie.Amount);
+                    var totalExpenses = context.Transactions.Where(t => t.UserId == _currentUserId).Sum(t => t.Amount);
+                    return totalIncome - totalExpenses;
+                }
+            }
+        }
+
+        private void ShowIncomeEntryView()
         {
             if (IsLoggedIn)
             {
-                CurrentView = new IncomeExpenseEntryView { DataContext = new IncomeExpenseEntryViewModel(_currentUserId) };
+                CurrentView = new IncomeEntryView { DataContext = new IncomeEntryViewModel(_currentUserId) };
             }
         }
 

@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
-                <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5" >
+            <Button Content="New Transaction" Command="{Binding ShowTransactionEntryViewCommand}" Margin="5" >
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource BlueButtonStyle}">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
@@ -36,18 +36,6 @@
             <Button Content="Transaction History" Command="{Binding ShowTransactionHistoryViewCommand}" Margin="5" >
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                        <Setter Property="Visibility" Value="Collapsed"></Setter>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
-                                <Setter Property="Visibility" Value="Visible"></Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Content="Income and Expense Entries" Command="{Binding ShowIncomeExpenseEntryViewCommand}" Margin="5">
-                <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource BlueButtonStyle}">
                         <Setter Property="Visibility" Value="Collapsed"></Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
@@ -81,43 +69,22 @@
                     </Style>
                 </Button.Style>
             </Button>
+            <Button Content="Income Entries" Command="{Binding ShowIncomeEntryViewCommand}" Margin="5" >
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource BlueButtonStyle}">
+                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoggedIn}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
+
+        <TextBlock Text="{Binding RemainingBalance, StringFormat='Remaining Balance: {0:C}'}" Margin="10" FontSize="16" FontWeight="Bold" Foreground="Green" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
 
         <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
     </Grid>
 </Window>
-
-
-<!-- 
-** Simple and Scalable Project: Personal Finance Tracker **
-
-Project Overview
-
-A Personal Finance Tracker application is a great project to start with WPF. 
-It involves creating a desktop application that allows users to track their income, expenses, and savings. 
-The application can be expanded with features like reporting, data visualization, and budget planning.
-
-Project Features
-
-*** Basic Features ***
-
-User Authentication (Login/Signup)
-Adding Income and Expense Entries
-Viewing Transaction History
-Categorizing Transactions (e.g., Food, Transport, Entertainment)
-Balance Summary (Total Income, Total Expenses, Net Balance)
-
-*** Intermediate Features ***
-
-Data Visualization (Charts and Graphs)
-Budget Planning
-Exporting Data (CSV, PDF)
-Notifications and Reminders
-
-*** Advanced Features ***
-
-Multi-user Support
-Cloud Syncing
-AI-driven Expense Analysis
-Mobile App Integration
--->
