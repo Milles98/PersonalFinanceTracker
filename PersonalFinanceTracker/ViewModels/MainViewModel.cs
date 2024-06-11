@@ -21,6 +21,19 @@ namespace PersonalFinanceTracker.ViewModels
             {
                 _transactions = value;
                 OnPropertyChanged(nameof(Transactions));
+                OnPropertyChanged(nameof(RemainingBalance));
+            }
+        }
+        
+        private ObservableCollection<IncomeEntry> _incomeEntries;
+        public ObservableCollection<IncomeEntry> IncomeEntries
+        {
+            get => _incomeEntries;
+            set
+            {
+                _incomeEntries = value;
+                OnPropertyChanged(nameof(IncomeEntries));
+                OnPropertyChanged(nameof(RemainingBalance)); 
             }
         }
 
@@ -86,12 +99,18 @@ namespace PersonalFinanceTracker.ViewModels
         {
             get
             {
-                using (var context = new FinanceContext())
-                {
-                    var totalIncome = context.IncomeEntries.Where(ie => ie.UserId == _currentUserId).Sum(ie => ie.Amount);
-                    var totalExpenses = context.Transactions.Where(t => t.UserId == _currentUserId).Sum(t => t.Amount);
-                    return totalIncome - totalExpenses;
-                }
+                var totalIncome = IncomeEntries.Sum(ie => ie.Amount);
+                var totalExpenses = Transactions.Sum(t => t.Amount);
+                return totalIncome - totalExpenses;
+            }
+        }
+        
+        public void ReloadData()
+        {
+            using (var context = new FinanceContext())
+            {
+                Transactions = new ObservableCollection<Transaction>(context.Transactions.Where(t => t.UserId == _currentUserId).ToList());
+                IncomeEntries = new ObservableCollection<IncomeEntry>(context.IncomeEntries.Where(ie => ie.UserId == _currentUserId).ToList());
             }
         }
 
@@ -150,6 +169,7 @@ namespace PersonalFinanceTracker.ViewModels
                     _currentUserId = user.Id;
                     CurrentUsername = username;
                     IsLoggedIn = true;
+                    ReloadData();
                     CurrentView = new WelcomeView { DataContext = new WelcomeViewModel(username) };
                 }
             }
