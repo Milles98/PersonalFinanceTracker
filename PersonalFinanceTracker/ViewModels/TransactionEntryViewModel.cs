@@ -18,6 +18,7 @@ namespace PersonalFinanceTracker.ViewModels
         private string _successMessage;
         private readonly DispatcherTimer _successMessageTimer;
         private readonly int _currentUserId;
+        private readonly Action _reloadDataCallback;
 
         public Transaction NewTransaction
         {
@@ -58,9 +59,10 @@ namespace PersonalFinanceTracker.ViewModels
         public ICommand AddTransactionCommand { get; }
         public ICommand AddCategoryCommand { get; }
 
-        public TransactionEntryViewModel(int currentUserId)
+        public TransactionEntryViewModel(int currentUserId, Action reloadDataCallback)
         {
             _currentUserId = currentUserId;
+            _reloadDataCallback = reloadDataCallback;
             NewTransaction = new Transaction { Date = DateTime.Now };
             Categories = new ObservableCollection<Category>();
             AddTransactionCommand = new RelayCommand(AddTransaction);
@@ -89,6 +91,12 @@ namespace PersonalFinanceTracker.ViewModels
 
         private void AddTransaction(object obj)
         {
+            if (NewTransaction.CategoryId == 0)
+            {
+                SuccessMessage = "Please choose valid category";
+                return;
+            }
+            
             using (var context = new FinanceContext())
             {
                 NewTransaction.UserId = _currentUserId;
@@ -96,6 +104,7 @@ namespace PersonalFinanceTracker.ViewModels
                 context.SaveChanges();
                 NewTransaction = new Transaction { Date = DateTime.Now };
                 SuccessMessage = "Transaction added successfully!";
+                _reloadDataCallback();
                 OnPropertyChanged(nameof(NewTransaction));
             }
         }
