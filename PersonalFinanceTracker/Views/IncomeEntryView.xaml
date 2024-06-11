@@ -12,7 +12,7 @@
             <StackPanel.Effect>
                 <BlurEffect Radius="{Binding IsSuccessMessageVisible, Converter={StaticResource BooleanToBlurRadiusConverter}}"/>
             </StackPanel.Effect>
-            <TextBlock Text="Description of Income" Margin="0 50 0 -5" TextAlignment="Center"/>
+            <TextBlock Text="Description of Income" Margin="0 40 0 -5" TextAlignment="Center"/>
             <TextBox x:Name="DescriptionTextBox" Margin="10 10" Text="{Binding NewEntry.Description, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Amount" Margin="0 10 0 -5" TextAlignment="Center"/>
             <TextBox x:Name="AmountTextBox" Margin="10 10" Text="{Binding NewEntry.Amount, UpdateSourceTrigger=PropertyChanged}"/>
@@ -26,5 +26,13 @@
             <TextBlock x:Name="SuccessMessage" Text="{Binding SuccessMessage}" Foreground="Green" FontWeight="Bold"
                        HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
         </Border>
+
+        <DataGrid ItemsSource="{Binding IncomeEntries}" AutoGenerateColumns="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 90">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
+                <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=C}" Width="*" />
+                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
